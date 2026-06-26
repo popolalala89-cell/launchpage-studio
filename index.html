@@ -670,7 +670,151 @@
   <!-- Toast -->
   <div class="toast"></div>
 
-  <!-- Scripts -->
+  <!-- Order Modal (V2 Preview) -->
+  <div class="modal-overlay" id="orderModal">
+    <div class="modal">
+      <div class="modal-header">
+        <h3>Pesan Website</h3>
+        <button class="modal-close" onclick="closeOrderModal()">✕</button>
+      </div>
+      <form id="orderForm" onsubmit="handleOrderSubmit(event)">
+        <div class="modal-body">
+          <div class="form-row">
+            <div class="form-group">
+              <label>Nama Lengkap *</label>
+              <input type="text" class="form-input" id="ordName" required placeholder="Contoh: Andi Pratama">
+            </div>
+            <div class="form-group">
+              <label>No. WhatsApp *</label>
+              <input type="tel" class="form-input" id="ordPhone" required placeholder="0812xxxxxxx">
+            </div>
+          </div>
+          <div class="form-row">
+            <div class="form-group">
+              <label>Email</label>
+              <input type="email" class="form-input" id="ordEmail" placeholder="andi@example.com">
+            </div>
+            <div class="form-group">
+              <label>Nama Bisnis *</label>
+              <input type="text" class="form-input" id="ordBiz" required placeholder="Nama usaha Anda">
+            </div>
+          </div>
+          <div class="form-row">
+            <div class="form-group">
+              <label>Tipe Bisnis</label>
+              <select class="form-input" id="ordType">
+                <option value="">Pilih...</option>
+                <option value="kuliner">Kuliner</option>
+                <option value="jasa">Jasa</option>
+                <option value="personal">Personal Branding</option>
+                <option value="umkm">UMKM</option>
+                <option value="lainnya">Lainnya</option>
+              </select>
+            </div>
+            <div class="form-group">
+              <label>Paket *</label>
+              <select class="form-input" id="ordPackage" required>
+                <option value="">Pilih paket...</option>
+                <option value="Basic">Basic — Rp149.000/thn</option>
+                <option value="Pro">Pro — Rp349.000/thn</option>
+                <option value="Premium">Premium — Rp799.000/thn</option>
+              </select>
+            </div>
+          </div>
+          <div class="form-group">
+            <label>Deskripsi / Catatan</label>
+            <textarea class="form-input" id="ordDesc" rows="3" placeholder="Ceritakan tentang bisnis Anda..."></textarea>
+          </div>
+          <p class="form-note">* Kami akan menghubungi Anda via WhatsApp dalam 1x24 jam</p>
+        </div>
+        <div class="modal-footer">
+          <button type="button" class="btn btn-outlined" onclick="closeOrderModal()">Batal</button>
+          <button type="submit" class="btn btn-contained" id="orderSubmitBtn">
+            💬 Kirim Pesanan
+          </button>
+        </div>
+      </form>
+    </div>
+  </div>
+
+  <!-- Supabase & Scripts -->
+  <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+  <script src="js/supabase.js"></script>
   <script src="js/main.js"></script>
+  <script>
+    // ============================================================
+    // Order Modal
+    // ============================================================
+    function openOrderModal(pkg) {
+      document.getElementById('orderModal').classList.add('active');
+      if (pkg) document.getElementById('ordPackage').value = pkg;
+      document.body.style.overflow = 'hidden';
+    }
+
+    function closeOrderModal() {
+      document.getElementById('orderModal').classList.remove('active');
+      document.body.style.overflow = '';
+    }
+
+    // Click overlay to close
+    document.getElementById('orderModal').addEventListener('click', function(e) {
+      if (e.target === this) closeOrderModal();
+    });
+
+    // Escape to close
+    document.addEventListener('keydown', function(e) {
+      if (e.key === 'Escape') closeOrderModal();
+    });
+
+    // Hook "Pesan Paket Ini" buttons to open modal
+    document.querySelectorAll('.pricing-card .btn').forEach(function(btn) {
+      btn.addEventListener('click', function(e) {
+        if (window.LP && !SUPABASE_URL.includes('YOUR_PROJECT_ID')) {
+          e.preventDefault();
+          var card = this.closest('.pricing-card');
+          var pkg = card ? card.querySelector('.pricing-name')?.textContent?.trim() : '';
+          openOrderModal(pkg);
+        }
+        // else fallback ke WA link
+      });
+    });
+
+    // ============================================================
+    // Order Form Submit
+    // ============================================================
+    async function handleOrderSubmit(event) {
+      event.preventDefault();
+
+      if (!window.LP) {
+        showToast('❌ Supabase belum dikonfigurasi. Hubungi admin.');
+        return;
+      }
+
+      var btn = document.getElementById('orderSubmitBtn');
+      btn.disabled = true;
+      btn.textContent = '⏳ Mengirim...';
+
+      var result = await LP.submitOrder({
+        name: document.getElementById('ordName').value,
+        phone: document.getElementById('ordPhone').value,
+        email: document.getElementById('ordEmail').value,
+        businessName: document.getElementById('ordBiz').value,
+        businessType: document.getElementById('ordType').value,
+        package: document.getElementById('ordPackage').value,
+        description: document.getElementById('ordDesc').value
+      });
+
+      btn.disabled = false;
+      btn.textContent = '💬 Kirim Pesanan';
+
+      if (result.status === 'success') {
+        showToast('✅ ' + result.message + ' (ID: ' + result.orderId + ')');
+        document.getElementById('orderForm').reset();
+        setTimeout(closeOrderModal, 2000);
+      } else {
+        showToast('❌ ' + result.message);
+      }
+    }
+  </script>
 </body>
 </html>
