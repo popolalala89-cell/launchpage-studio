@@ -1,0 +1,166 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Warung Makan Sederhana — Demo Restoran</title>
+  <meta name="description" content="Demo landing page restoran - Warung Makan Sederhana. Menu, galeri, dan pesan via WhatsApp.">
+  <link rel="stylesheet" href="../css/style.css">
+  <style>
+    .demo-hero-restoran {
+      background: linear-gradient(135deg, #D97706, #EA580C);
+      color: #fff;
+      padding: var(--space-4xl) 0;
+      text-align: center;
+    }
+    .demo-hero-restoran h1 { color: #fff; font-size: clamp(2rem,5vw,3rem); }
+    .demo-hero-restoran p { color: rgba(255,255,255,0.85); max-width: 500px; margin: var(--space-md) auto; }
+    .menu-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+      gap: var(--space-lg);
+      margin-top: var(--space-xl);
+    }
+    .menu-item {
+      display: flex;
+      gap: var(--space-md);
+      padding: var(--space-md);
+    }
+    .menu-item .menu-img {
+      width: 80px;
+      height: 80px;
+      border-radius: var(--radius-sm);
+      background: var(--md-surface-variant);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 2rem;
+      flex-shrink: 0;
+    }
+    .menu-item .menu-info { flex: 1; }
+    .menu-item .menu-info h4 { margin-bottom: var(--space-xs); font-size: 1rem; }
+    .menu-item .menu-info p { font-size: 0.85rem; color: var(--md-text-muted); }
+    .menu-item .menu-price { font-weight: 700; color: var(--md-primary); }
+    .demo-gallery {
+      display: grid;
+      grid-template-columns: repeat(3, 1fr);
+      gap: var(--space-md);
+      margin-top: var(--space-lg);
+    }
+    .demo-gallery .gallery-item {
+      aspect-ratio: 4/3;
+      background: var(--md-surface-variant);
+      border-radius: var(--radius-sm);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 2.5rem;
+    }
+    @media (max-width: 768px) {
+      .demo-gallery { grid-template-columns: repeat(2, 1fr); }
+    }
+  </style>
+</head>
+<body class="demo-page">
+  <header class="demo-header">
+    <div class="container">
+      <h2>🍽️ Warung Makan Sederhana</h2>
+      <a href="../index.html#portofolio" class="btn btn-outlined btn-small">← Kembali</a>
+    </div>
+  </header>
+
+  <section class="demo-hero-restoran">
+    <div class="container">
+      <h1>Warung Makan Sederhana</h1>
+      <p>Masakan rumahan dengan cita rasa tradisional. Nyaman, bersih, dan ramah di kantong.</p>
+      <a href="https://wa.me/6281234567890?text=Halo%20Warung%20Sederhana%2C%20saya%20mau%20pesan" class="btn btn-whatsapp">Pesan Sekarang</a>
+    </div>
+  </section>
+
+  <section class="demo-content">
+    <div class="container">
+      <h2 class="section-title">Menu Kami</h2>
+      <div class="menu-grid">
+        <div class="menu-item m3-card-outlined">
+          <div class="menu-img">🍜</div>
+          <div class="menu-info">
+            <h4>Mie Goreng Spesial</h4>
+            <p>Mie goreng dengan telur, sayur segar, dan ayam suwir.</p>
+            <span class="menu-price">Rp18.000</span>
+          </div>
+        </div>
+        <div class="menu-item m3-card-outlined">
+          <div class="menu-img">🍛</div>
+          <div class="menu-info">
+            <h4>Nasi Goreng Kampung</h4>
+            <p>Nasi goreng dengan bumbu tradisional, kerupuk, dan acar.</p>
+            <span class="menu-price">Rp20.000</span>
+          </div>
+        </div>
+        <div class="menu-item m3-card-outlined">
+          <div class="menu-img">🥘</div>
+          <div class="menu-info">
+            <h4>Ayam Goreng Mentega</h4>
+            <p>Ayam goreng crispy dengan saus mentega spesial.</p>
+            <span class="menu-price">Rp25.000</span>
+          </div>
+        </div>
+        <div class="menu-item m3-card-outlined">
+          <div class="menu-img">🥗</div>
+          <div class="menu-info">
+            <h4>Gado-Gado</h4>
+            <p>Sayuran rebus dengan siraman bumbu kacang dan kerupuk.</p>
+            <span class="menu-price">Rp15.000</span>
+          </div>
+        </div>
+        <div class="menu-item m3-card-outlined">
+          <div class="menu-img">🥤</div>
+          <div class="menu-info">
+            <h4>Es Teh Manis</h4>
+            <p>Teh manis segar dengan es batu. Pelepas dahaga.</p>
+            <span class="menu-price">Rp5.000</span>
+          </div>
+        </div>
+        <div class="menu-item m3-card-outlined">
+          <div class="menu-img">🧋</div>
+          <div class="menu-info">
+            <h4>Es Jeruk</h4>
+            <p>Jeruk segar peras, manis dan asam menyegarkan.</p>
+            <span class="menu-price">Rp7.000</span>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <section class="demo-content" style="background: var(--md-surface-variant);">
+    <div class="container">
+      <h2 class="section-title">Galeri</h2>
+      <div class="demo-gallery">
+        <div class="gallery-item">🍳</div>
+        <div class="gallery-item">🥩</div>
+        <div class="gallery-item">🥦</div>
+        <div class="gallery-item">🍰</div>
+        <div class="gallery-item">☕</div>
+        <div class="gallery-item">🍽️</div>
+      </div>
+    </div>
+  </section>
+
+  <section class="demo-content">
+    <div class="container text-center">
+      <h2 class="section-title">Hubungi Kami</h2>
+      <p style="color: var(--md-text-muted); margin-bottom: var(--space-lg);">
+        📍 Jl. Merdeka No. 123, Jakarta | 🕐 08.00 - 21.00
+      </p>
+      <a href="https://wa.me/6281234567890?text=Halo%20Warung%20Sederhana" class="btn btn-whatsapp btn-large">💬 Pesan via WhatsApp</a>
+    </div>
+  </section>
+
+  <footer class="demo-footer">
+    <div class="container">
+      <p>&copy; 2026 Warung Makan Sederhana — Demo LaunchPage Studio</p>
+    </div>
+  </footer>
+</body>
+</html>

@@ -1,0 +1,221 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Bengkel Murni Jaya — Demo Bengkel</title>
+  <meta name="description" content="Demo landing page bengkel motor - Bengkel Murni Jaya. Layanan servis, harga, dan booking online.">
+  <link rel="stylesheet" href="../css/style.css">
+  <style>
+    .demo-hero-bengkel {
+      background: linear-gradient(135deg, #1E40AF, #1D4ED8);
+      color: #fff;
+      padding: var(--space-4xl) 0;
+      text-align: center;
+    }
+    .demo-hero-bengkel h1 { color: #fff; font-size: clamp(2rem,5vw,3rem); }
+    .demo-hero-bengkel p { color: rgba(255,255,255,0.85); max-width: 500px; margin: var(--space-md) auto; }
+    .service-list {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+      gap: var(--space-lg);
+      margin-top: var(--space-xl);
+    }
+    .service-card {
+      display: flex;
+      gap: var(--space-md);
+      padding: var(--space-lg);
+    }
+    .service-card .sc-icon {
+      width: 60px;
+      height: 60px;
+      border-radius: var(--radius-md);
+      background: var(--md-primary-container);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 1.5rem;
+      flex-shrink: 0;
+    }
+    .service-card .sc-info h3 { font-size: 1rem; margin-bottom: var(--space-xs); }
+    .service-card .sc-info p { font-size: 0.85rem; color: var(--md-text-muted); margin-bottom: var(--space-xs); }
+    .service-card .sc-price { font-weight: 700; color: var(--md-primary); }
+    .price-table {
+      width: 100%;
+      border-collapse: collapse;
+      margin-top: var(--space-lg);
+    }
+    .price-table th, .price-table td {
+      padding: var(--space-md);
+      text-align: left;
+      border-bottom: 1px solid var(--md-surface-variant);
+    }
+    .price-table th {
+      font-weight: 600;
+      color: var(--md-text-muted);
+      font-size: 0.85rem;
+      text-transform: uppercase;
+      letter-spacing: 0.06em;
+    }
+    .price-table td { font-size: 0.92rem; }
+    .price-table tr:hover td { background: var(--md-surface-variant); }
+    .booking-section {
+      background: linear-gradient(135deg, #1E40AF, #1D4ED8);
+      color: #fff;
+      padding: var(--space-3xl) 0;
+      text-align: center;
+    }
+    .booking-section h2 { color: #fff; }
+    .booking-section p { color: rgba(255,255,255,0.85); }
+  </style>
+</head>
+<body class="demo-page">
+  <header class="demo-header">
+    <div class="container">
+      <h2>🔧 Bengkel Murni Jaya</h2>
+      <a href="../index.html#portofolio" class="btn btn-outlined btn-small">← Kembali</a>
+    </div>
+  </header>
+
+  <section class="demo-hero-bengkel">
+    <div class="container">
+      <h1>Bengkel Murni Jaya</h1>
+      <p>Servis motor profesional, harga bersahabat. Antrian online biar gak ngantri lama!</p>
+      <a href="https://wa.me/6281234567890?text=Halo%20Bengkel%20Murni%20Jaya%2C%20saya%20mau%20booking%20servis" class="btn btn-whatsapp">🔧 Booking Servis</a>
+    </div>
+  </section>
+
+  <!-- Layanan -->
+  <section class="demo-content">
+    <div class="container">
+      <h2 class="section-title">Layanan Servis</h2>
+      <div class="service-list">
+        <div class="service-card m3-card-outlined">
+          <div class="sc-icon">🔧</div>
+          <div class="sc-info">
+            <h3>Servis Ringan</h3>
+            <p>Ganti oli, busi, filter udara, dan setelan karburator/injeksi.</p>
+            <span class="sc-price">Rp50.000</span>
+          </div>
+        </div>
+        <div class="service-card m3-card-outlined">
+          <div class="sc-icon">⚙️</div>
+          <div class="sc-info">
+            <h3>Servis Berat</h3>
+            <p>Turun mesin, ganti kampas kopling, servis CVT matic.</p>
+            <span class="sc-price">Rp150.000</span>
+          </div>
+        </div>
+        <div class="service-card m3-card-outlined">
+          <div class="sc-icon">🔩</div>
+          <div class="sc-info">
+            <h3>Ganti Ban</h3>
+            <p>Ganti ban luar & dalam, balancing & angin nitrogen.</p>
+            <span class="sc-price">Rp20.000 + Ban</span>
+          </div>
+        </div>
+        <div class="service-card m3-card-outlined">
+          <div class="sc-icon">🔋</div>
+          <div class="sc-info">
+            <h3>Ganti Aki</h3>
+            <p>Ganti aki kering/basah untuk semua tipe motor.</p>
+            <span class="sc-price">Rp80.000</span>
+          </div>
+        </div>
+        <div class="service-card m3-card-outlined">
+          <div class="sc-icon">🛞</div>
+          <div class="sc-info">
+            <h3>Spooring Balancing</h3>
+            <p>Setelan roda depan & belakang, balancing presisi.</p>
+            <span class="sc-price">Rp75.000</span>
+          </div>
+        </div>
+        <div class="service-card m3-card-outlined">
+          <div class="sc-icon">🎨</div>
+          <div class="sc-info">
+            <h3>Cat & Body Repair</h3>
+            <p>Cat ulang body, perbaikan bodi lecet/penyok.</p>
+            <span class="sc-price">Mulai Rp300.000</span>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- Price Table -->
+  <section class="demo-content" style="background: var(--md-surface-variant);">
+    <div class="container">
+      <h2 class="section-title">Daftar Harga Servis</h2>
+      <div style="overflow-x: auto;">
+        <table class="price-table m3-card">
+          <thead>
+            <tr>
+              <th>Jenis Servis</th>
+              <th>Motor Matic</th>
+              <th>Motor Bebek</th>
+              <th>Motor Sport</th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr>
+              <td>Ganti Oli Mesin</td>
+              <td>Rp45.000</td>
+              <td>Rp40.000</td>
+              <td>Rp60.000</td>
+            </tr>
+            <tr>
+              <td>Servis Ringan</td>
+              <td>Rp50.000</td>
+              <td>Rp45.000</td>
+              <td>Rp70.000</td>
+            </tr>
+            <tr>
+              <td>Servis Besar</td>
+              <td>Rp150.000</td>
+              <td>Rp130.000</td>
+              <td>Rp200.000</td>
+            </tr>
+            <tr>
+              <td>Ganti Kampas Rem</td>
+              <td>Rp35.000</td>
+              <td>Rp30.000</td>
+              <td>Rp50.000</td>
+            </tr>
+            <tr>
+              <td>Ganti Rantai + Gir</td>
+              <td>Rp120.000</td>
+              <td>Rp110.000</td>
+              <td>Rp180.000</td>
+            </tr>
+          </tbody>
+        </table>
+      </div>
+    </div>
+  </section>
+
+  <!-- Booking -->
+  <section class="booking-section">
+    <div class="container">
+      <h2>Booking Antrian Servis</h2>
+      <p style="margin-bottom: var(--space-lg);">Isi data dan pilih jam — datas kami siapkan. Gak perlu nunggu lama!</p>
+      <a href="https://wa.me/6281234567890?text=Halo%20Bengkel%20Murni%20Jaya%2C%20saya%20mau%20booking%20servis%20motor%20-%20Nama%3A%20%5Bisi%5D%2C%20Jam%3A%20%5Bisi%5D" class="btn btn-whatsapp btn-large">📅 Booking Sekarang</a>
+    </div>
+  </section>
+
+  <section class="demo-content">
+    <div class="container text-center">
+      <h2 class="section-title">Hubungi Kami</h2>
+      <p style="color: var(--md-text-muted); margin-bottom: var(--space-md);">
+        📍 Jl. Ahmad Yani No. 78, Jakarta | 🕐 08.00 - 17.00 (Senin-Sabtu)
+      </p>
+      <a href="https://wa.me/6281234567890?text=Halo%20Bengkel%20Murni%20Jaya" class="btn btn-whatsapp btn-large">💬 Hubungi via WhatsApp</a>
+    </div>
+  </section>
+
+  <footer class="demo-footer">
+    <div class="container">
+      <p>&copy; 2026 Bengkel Murni Jaya — Demo LaunchPage Studio</p>
+    </div>
+  </footer>
+</body>
+</html>

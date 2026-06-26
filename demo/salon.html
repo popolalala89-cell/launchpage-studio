@@ -1,0 +1,164 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Glow Beauty Salon — Demo Salon</title>
+  <meta name="description" content="Demo landing page salon - Glow Beauty Salon. Booking online, galeri gaya rambut, dan info harga.">
+  <link rel="stylesheet" href="../css/style.css">
+  <style>
+    .demo-hero-salon {
+      background: linear-gradient(135deg, #EC4899, #8B5CF6);
+      color: #fff;
+      padding: var(--space-4xl) 0;
+      text-align: center;
+    }
+    .demo-hero-salon h1 { color: #fff; font-size: clamp(2rem,5vw,3rem); }
+    .demo-hero-salon p { color: rgba(255,255,255,0.85); max-width: 500px; margin: var(--space-md) auto; }
+    .services-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
+      gap: var(--space-lg);
+      margin-top: var(--space-xl);
+    }
+    .service-card {
+      text-align: center;
+      padding: var(--space-xl);
+    }
+    .service-card .service-icon {
+      font-size: 2.5rem;
+      margin-bottom: var(--space-md);
+    }
+    .service-card h3 { font-size: 1rem; margin-bottom: var(--space-xs); }
+    .service-card p { font-size: 0.85rem; color: var(--md-text-muted); margin-bottom: var(--space-sm); }
+    .service-card .service-price { font-weight: 700; color: var(--md-primary); font-size: 1.05rem; }
+    .team-grid {
+      display: grid;
+      grid-template-columns: repeat(3, 1fr);
+      gap: var(--space-lg);
+      margin-top: var(--space-lg);
+    }
+    .team-card {
+      text-align: center;
+      padding: var(--space-lg);
+    }
+    .team-card .team-avatar {
+      width: 80px;
+      height: 80px;
+      border-radius: 50%;
+      background: var(--md-secondary-container);
+      margin: 0 auto var(--space-md);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 2rem;
+    }
+    .team-card h4 { font-size: 1rem; margin-bottom: var(--space-xs); }
+    .team-card p { font-size: 0.85rem; color: var(--md-text-muted); }
+    @media (max-width: 768px) {
+      .team-grid { grid-template-columns: 1fr; }
+    }
+  </style>
+</head>
+<body class="demo-page">
+  <header class="demo-header">
+    <div class="container">
+      <h2>💇 Glow Beauty Salon</h2>
+      <a href="../index.html#portofolio" class="btn btn-outlined btn-small">← Kembali</a>
+    </div>
+  </header>
+
+  <section class="demo-hero-salon">
+    <div class="container">
+      <h1>Glow Beauty Salon</h1>
+      <p>Makeup & hairstyling profesional. Tampil cantik untuk setiap momen spesial Anda.</p>
+      <a href="https://wa.me/6281234567890?text=Halo%20Glow%20Salon%2C%20saya%20mau%20booking" class="btn btn-whatsapp">💬 Booking Sekarang</a>
+    </div>
+  </section>
+
+  <section class="demo-content">
+    <div class="container text-center">
+      <h2 class="section-title">Layanan Kami</h2>
+      <p class="section-subtitle">Dari potong rambut hingga bridal makeup — semua ada di sini.</p>
+      <div class="services-grid">
+        <div class="service-card m3-card-elevated">
+          <div class="service-icon">💇‍♀️</div>
+          <h3>Potong Rambut</h3>
+          <p>Potong rambut wanita & pria sesuai model terbaru.</p>
+          <span class="service-price">Rp50.000</span>
+        </div>
+        <div class="service-card m3-card-elevated">
+          <div class="service-icon">🎨</div>
+          <h3>Coloring</h3>
+          <p>Pewarnaan rambut dengan produk berkualitas tinggi.</p>
+          <span class="service-price">Rp150.000</span>
+        </div>
+        <div class="service-card m3-card-elevated">
+          <div class="service-icon">💄</div>
+          <h3>Makeup</h3>
+          <p>Makeup daily, pesta, hingga bridal makeup.</p>
+          <span class="service-price">Rp200.000</span>
+        </div>
+        <div class="service-card m3-card-elevated">
+          <div class="service-icon">💆</div>
+          <h3>Facial</h3>
+          <p>Facial treatment untuk kulit bersih dan sehat.</p>
+          <span class="service-price">Rp120.000</span>
+        </div>
+        <div class="service-card m3-card-elevated">
+          <div class="service-icon">👑</div>
+          <h3>Bridal Paket</h3>
+          <p>Paket lengkap makeup + sanggul untuk pengantin.</p>
+          <span class="service-price">Rp500.000</span>
+        </div>
+        <div class="service-card m3-card-elevated">
+          <div class="service-icon">💅</div>
+          <h3>Nail Art</h3>
+          <p>Perawatan kuku dan nail art cantik & trendi.</p>
+          <span class="service-price">Rp80.000</span>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <section class="demo-content" style="background: var(--md-surface-variant);">
+    <div class="container text-center">
+      <h2 class="section-title">Tim Kami</h2>
+      <p class="section-subtitle">Tenaga profesional berpengalaman di bidangnya.</p>
+      <div class="team-grid">
+        <div class="team-card m3-card">
+          <div class="team-avatar">👩</div>
+          <h4>Rina Wijaya</h4>
+          <p>Senior Stylist — 10 tahun pengalaman</p>
+        </div>
+        <div class="team-card m3-card">
+          <div class="team-avatar">👩‍🦰</div>
+          <h4>Dian Permata</h4>
+          <p>Makeup Artist — Spesialis Bridal</p>
+        </div>
+        <div class="team-card m3-card">
+          <div class="team-avatar">👨</div>
+          <h4>Agus Prasetyo</h4>
+          <p>Barberman — Potong rambut pria</p>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <section class="demo-content">
+    <div class="container text-center">
+      <h2 class="section-title">Hubungi Kami</h2>
+      <p style="color: var(--md-text-muted); margin-bottom: var(--space-lg);">
+        📍 Jl. Gatot Subroto No. 45, Jakarta | 🕐 09.00 - 20.00 (Senin-Sabtu)
+      </p>
+      <a href="https://wa.me/6281234567890?text=Halo%20Glow%20Salon%2C%20saya%20mau%20booking" class="btn btn-whatsapp btn-large">💬 Booking via WhatsApp</a>
+    </div>
+  </section>
+
+  <footer class="demo-footer">
+    <div class="container">
+      <p>&copy; 2026 Glow Beauty Salon — Demo LaunchPage Studio</p>
+    </div>
+  </footer>
+</body>
+</html>

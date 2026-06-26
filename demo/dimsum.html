@@ -1,0 +1,152 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Dimsum Denaya — Demo Kuliner</title>
+  <meta name="description" content="Demo landing page dimsum - Dimsum Denaya. Menu digital dengan foto produk dan pesan via WA.">
+  <link rel="stylesheet" href="../css/style.css">
+  <style>
+    .demo-hero-dimsum {
+      background: linear-gradient(135deg, #DC2626, #EA580C);
+      color: #fff;
+      padding: var(--space-4xl) 0;
+      text-align: center;
+    }
+    .demo-hero-dimsum h1 { color: #fff; font-size: clamp(2rem,5vw,3rem); }
+    .demo-hero-dimsum p { color: rgba(255,255,255,0.85); max-width: 500px; margin: var(--space-md) auto; }
+    .dimsum-menu-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+      gap: var(--space-lg);
+      margin-top: var(--space-xl);
+    }
+    .dimsum-card {
+      padding: var(--space-lg);
+      text-align: center;
+    }
+    .dimsum-card .ds-icon {
+      font-size: 3rem;
+      margin-bottom: var(--space-md);
+    }
+    .dimsum-card h3 { font-size: 1.05rem; margin-bottom: var(--space-xs); }
+    .dimsum-card .ds-desc { font-size: 0.85rem; color: var(--md-text-muted); margin-bottom: var(--space-sm); }
+    .dimsum-card .ds-price { font-weight: 700; color: var(--md-primary); font-size: 1.1rem; }
+    .dimsum-card .ds-order {
+      display: inline-block;
+      margin-top: var(--space-sm);
+      padding: 6px 18px;
+      background: #25D366;
+      color: #fff;
+      border-radius: var(--radius-full);
+      font-size: 0.82rem;
+      font-weight: 600;
+      cursor: pointer;
+      transition: opacity var(--transition-fast);
+    }
+    .dimsum-card .ds-order:hover { opacity: 0.85; }
+    .promo-banner {
+      background: linear-gradient(135deg, #FEF3C7, #FDE68A);
+      border-radius: var(--radius-md);
+      padding: var(--space-xl);
+      text-align: center;
+      margin: var(--space-xl) 0;
+    }
+    .promo-banner h3 { color: #92400E; font-size: 1.3rem; }
+    .promo-banner p { color: #92400E; opacity: 0.8; }
+    .promo-banner .promo-price { font-size: 2rem; font-weight: 800; color: #DC2626; }
+  </style>
+</head>
+<body class="demo-page">
+  <header class="demo-header">
+    <div class="container">
+      <h2>🥟 Dimsum Denaya</h2>
+      <a href="../index.html#portofolio" class="btn btn-outlined btn-small">← Kembali</a>
+    </div>
+  </header>
+
+  <section class="demo-hero-dimsum">
+    <div class="container">
+      <h1>Dimsum Denaya</h1>
+      <p>Dimsum homemade berkualitas premium. Halal, higienis, dan fresh tiap hari.</p>
+      <a href="https://wa.me/6281234567890?text=Halo%20Dimsum%20Denaya%2C%20saya%20mau%20order" class="btn btn-whatsapp">🛵 Pesan Sekarang</a>
+    </div>
+  </section>
+
+  <section class="demo-content">
+    <div class="container">
+      <div class="promo-banner fade-up">
+        <h3>🔥 Paket Hemat 50 Pcs</h3>
+        <p>Campur varian favorit! Cocok untuk acara keluarga.</p>
+        <div class="promo-price">Rp85.000</div>
+        <a href="https://wa.me/6281234567890?text=Halo%20Dimsum%20Denaya%2C%20saya%20mau%20paket%20hemat%2050pcs" class="btn btn-whatsapp" style="margin-top: var(--space-md);">Pesan Paket</a>
+      </div>
+
+      <h2 class="section-title">Menu Kami</h2>
+      <div class="dimsum-menu-grid">
+        <div class="dimsum-card m3-card-elevated fade-up">
+          <div class="ds-icon">🥟</div>
+          <h3>Siomay Ayam</h3>
+          <p class="ds-desc">Siomay ayam cincang dengan kulit pangsit tipis.</p>
+          <div class="ds-price">Rp25.000 (10 pcs)</div>
+          <div class="ds-order" onclick="window.open('https://wa.me/6281234567890?text=Halo%20Dimsum%20Denaya%2C%20saya%20mau%20order%20Siomay%20Ayam','_blank')">🛒 Order</div>
+        </div>
+        <div class="dimsum-card m3-card-elevated fade-up delay-100">
+          <div class="ds-icon">🥟</div>
+          <h3>Hakau Udang</h3>
+          <p class="ds-desc">Dimsum udang segar dengan balutan kulit transparan.</p>
+          <div class="ds-price">Rp30.000 (10 pcs)</div>
+          <div class="ds-order" onclick="window.open('https://wa.me/6281234567890?text=Halo%20Dimsum%20Denaya%2C%20saya%20mau%20order%20Hakau%20Udang','_blank')">🛒 Order</div>
+        </div>
+        <div class="dimsum-card m3-card-elevated fade-up delay-200">
+          <div class="ds-icon">🥟</div>
+          <h3>Lumpia Udang</h3>
+          <p class="ds-desc">Lumpia udang renyah dengan isian padat.</p>
+          <div class="ds-price">Rp28.000 (10 pcs)</div>
+          <div class="ds-order" onclick="window.open('https://wa.me/6281234567890?text=Halo%20Dimsum%20Denaya%2C%20saya%20mau%20order%20Lumpia%20Udang','_blank')">🛒 Order</div>
+        </div>
+        <div class="dimsum-card m3-card-elevated fade-up delay-300">
+          <div class="ds-icon">🥟</div>
+          <h3>Pangsit Goreng</h3>
+          <p class="ds-desc">Pangsit goreng isi ayam dan sayuran, crispy.</p>
+          <div class="ds-price">Rp22.000 (10 pcs)</div>
+          <div class="ds-order" onclick="window.open('https://wa.me/6281234567890?text=Halo%20Dimsum%20Denaya%2C%20saya%20mau%20order%20Pangsit%20Goreng','_blank')">🛒 Order</div>
+        </div>
+        <div class="dimsum-card m3-card-elevated fade-up delay-400">
+          <div class="ds-icon">🥟</div>
+          <h3>Dimsum Campur</h3>
+          <p class="ds-desc">Campur varian favorit dalam satu paket.</p>
+          <div class="ds-price">Rp35.000 (15 pcs)</div>
+          <div class="ds-order" onclick="window.open('https://wa.me/6281234567890?text=Halo%20Dimsum%20Denaya%2C%20saya%20mau%20order%20Dimsum%20Campur','_blank')">🛒 Order</div>
+        </div>
+        <div class="dimsum-card m3-card-elevated fade-up delay-500">
+          <div class="ds-icon">🥟</div>
+          <h3>Saus Cocol Spesial</h3>
+          <p class="ds-desc">Saus kacang dan saus pedas homemade.</p>
+          <div class="ds-price">Rp10.000</div>
+          <div class="ds-order" onclick="window.open('https://wa.me/6281234567890?text=Halo%20Dimsum%20Denaya%2C%20saya%20mau%20order%20Saus%20Cocol','_blank')">🛒 Order</div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <section class="demo-content" style="background: var(--md-surface-variant);">
+    <div class="container text-center">
+      <h2 class="section-title">Informasi & Kontak</h2>
+      <p style="color: var(--md-text-muted); margin-bottom: var(--space-md);">
+        📍 Perumahan Permata Hijau Blok C3, Jakarta<br>
+        🕐 07.00 - 17.00 (Senin-Sabtu)<br>
+        📞 0812-3456-7890
+      </p>
+      <a href="https://wa.me/6281234567890?text=Halo%20Dimsum%20Denaya%2C%20saya%20mau%20order" class="btn btn-whatsapp btn-large">🛵 Order via WhatsApp</a>
+    </div>
+  </section>
+
+  <footer class="demo-footer">
+    <div class="container">
+      <p>&copy; 2026 Dimsum Denaya — Demo LaunchPage Studio</p>
+    </div>
+  </footer>
+  <script src="../js/main.js"></script>
+</body>
+</html>

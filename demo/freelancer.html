@@ -1,0 +1,163 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Doni Hartono — Freelancer UI/UX Designer</title>
+  <meta name="description" content="Demo landing page freelancer - Doni Hartono. Portfolio UI/UX designer dengan project showcase dan contact form.">
+  <link rel="stylesheet" href="../css/style.css">
+  <style>
+    .demo-hero-freelancer {
+      background: linear-gradient(135deg, #1E293B, #334155);
+      color: #fff;
+      padding: var(--space-4xl) 0;
+      text-align: center;
+    }
+    .demo-hero-freelancer h1 { color: #fff; font-size: clamp(2rem,5vw,2.8rem); }
+    .demo-hero-freelancer p { color: rgba(255,255,255,0.75); max-width: 500px; margin: var(--space-md) auto; }
+    .freelancer-bio {
+      display: flex;
+      align-items: center;
+      gap: var(--space-xl);
+      padding: var(--space-xl);
+      margin-bottom: var(--space-xl);
+    }
+    .freelancer-bio .avatar-large {
+      width: 120px;
+      height: 120px;
+      border-radius: 50%;
+      background: var(--md-primary-container);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 3rem;
+      flex-shrink: 0;
+    }
+    .freelancer-bio .bio-text h2 { font-size: 1.3rem; margin-bottom: var(--space-xs); }
+    .freelancer-bio .bio-text p { color: var(--md-text-muted); font-size: 0.92rem; line-height: 1.7; }
+    .project-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+      gap: var(--space-lg);
+      margin-top: var(--space-lg);
+    }
+    .project-card {
+      padding: var(--space-lg);
+    }
+    .project-card .project-thumb {
+      width: 100%;
+      height: 180px;
+      background: linear-gradient(135deg, var(--md-primary-container), var(--md-secondary-container));
+      border-radius: var(--radius-sm);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 2rem;
+      margin-bottom: var(--space-md);
+    }
+    .project-card h3 { font-size: 1rem; margin-bottom: var(--space-xs); }
+    .project-card p { font-size: 0.85rem; color: var(--md-text-muted); margin-bottom: var(--space-sm); }
+    .project-card .project-tag {
+      display: inline-block;
+      padding: 2px 10px;
+      background: var(--md-primary-container);
+      color: var(--md-primary);
+      border-radius: var(--radius-full);
+      font-size: 0.75rem;
+      font-weight: 600;
+    }
+    .skills-list {
+      display: flex;
+      flex-wrap: wrap;
+      gap: var(--space-sm);
+      justify-content: center;
+      margin-top: var(--space-md);
+    }
+    .skills-list .skill-tag {
+      padding: 6px 16px;
+      background: var(--md-surface-variant);
+      border-radius: var(--radius-full);
+      font-size: 0.85rem;
+      font-weight: 500;
+      color: var(--md-text-secondary);
+    }
+    @media (max-width: 768px) {
+      .freelancer-bio { flex-direction: column; text-align: center; }
+    }
+  </style>
+</head>
+<body class="demo-page">
+  <header class="demo-header">
+    <div class="container">
+      <h2>👨‍💻 Doni Hartono</h2>
+      <a href="../index.html#portofolio" class="btn btn-outlined btn-small">← Kembali</a>
+    </div>
+  </header>
+
+  <section class="demo-hero-freelancer">
+    <div class="container">
+      <h1>Doni Hartono</h1>
+      <p>UI/UX Designer & Frontend Developer. Membantu bisnis Anda tampil digital dengan desain yang memukau.</p>
+      <a href="https://wa.me/6281234567890?text=Halo%20Doni%2C%20saya%20lihat%20portfolio%20Anda" class="btn btn-contained">💬 Hubungi Saya</a>
+    </div>
+  </section>
+
+  <section class="demo-content">
+    <div class="container">
+      <div class="freelancer-bio m3-card-elevated">
+        <div class="avatar-large">👨‍💻</div>
+        <div class="bio-text">
+          <h2>Tentang Saya</h2>
+          <p>Saya adalah UI/UX Designer dengan pengalaman 5+ tahun membantu berbagai startup dan UMKM menciptakan produk digital yang indah dan fungsional. Saya percaya bahwa desain yang baik adalah investasi, bukan biaya.</p>
+          <div class="skills-list">
+            <span class="skill-tag">Figma</span>
+            <span class="skill-tag">Adobe XD</span>
+            <span class="skill-tag">HTML/CSS</span>
+            <span class="skill-tag">JavaScript</span>
+            <span class="skill-tag">React</span>
+            <span class="skill-tag">Tailwind</span>
+          </div>
+        </div>
+      </div>
+
+      <h2 class="section-title">Project Terbaru</h2>
+      <div class="project-grid">
+        <div class="project-card m3-card">
+          <div class="project-thumb">🛒</div>
+          <h3>E-Commerce App</h3>
+          <p>Desain UI untuk aplikasi belanja online dengan pengalaman pengguna yang intuitif.</p>
+          <span class="project-tag">UI Design</span>
+        </div>
+        <div class="project-card m3-card">
+          <div class="project-thumb">📱</div>
+          <h3>Food Delivery</h3>
+          <p>Mobile app untuk pemesanan makanan dengan tracking real-time dan pembayaran mudah.</p>
+          <span class="project-tag">Mobile App</span>
+        </div>
+        <div class="project-card m3-card">
+          <div class="project-thumb">🏥</div>
+          <h3>Health Dashboard</h3>
+          <p>Dashboard monitoring kesehatan pasien untuk klinik dengan visualisasi data interaktif.</p>
+          <span class="project-tag">Dashboard</span>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <section class="demo-content" style="background: var(--md-surface-variant);">
+    <div class="container text-center">
+      <h2 class="section-title">Tertarik Bekerja Sama?</h2>
+      <p style="color: var(--md-text-muted); margin-bottom: var(--space-lg); max-width: 450px; margin-left: auto; margin-right: auto;">
+        Saya selalu terbuka untuk proyek baru. Diskusikan ide Anda dengan saya!
+      </p>
+      <a href="https://wa.me/6281234567890?text=Halo%20Doni%2C%20saya%20tertarik%20kerja%20sama" class="btn btn-contained btn-large">💬 Diskusi Proyek</a>
+    </div>
+  </section>
+
+  <footer class="demo-footer">
+    <div class="container">
+      <p>&copy; 2026 Doni Hartono — Demo LaunchPage Studio</p>
+    </div>
+  </footer>
+</body>
+</html>

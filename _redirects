@@ -1,0 +1,15 @@
+# Cloudflare Pages _redirects
+# Format: /source /destination status
+
+# Demo pages
+/demo/restoran /demo/restoran.html 200
+/demo/salon /demo/salon.html 200
+/demo/freelancer /demo/freelancer.html 200
+/demo/dimsum /demo/dimsum.html 200
+/demo/bengkel /demo/bengkel.html 200
+
+# Root
+/ /index.html 200
+
+# SPA fallback (if needed later)
+# /* /index.html 200
