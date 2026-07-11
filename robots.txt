@@ -1,7 +1,3 @@
 User-agent: *
 Allow: /
-Sitemap: https://launchpage-studio.com/sitemap.xml
-
-# Disallow admin-only paths
-Disallow: /gas/
-Disallow: /assets/
+Sitemap: https://mydigitalid.my.id/sitemap.xml

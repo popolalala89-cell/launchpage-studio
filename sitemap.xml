@@ -1,33 +1,33 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">
   <url>
-    <loc>https://launchpage-studio.com/</loc>
-    <changefreq>weekly</changefreq>
+    <loc>https://mydigitalid.my.id/</loc>
+    <lastmod>2026-07-11</lastmod>
+    <changefreq>monthly</changefreq>
     <priority>1.0</priority>
   </url>
   <url>
-    <loc>https://launchpage-studio.com/demo/restoran</loc>
-    <changefreq>monthly</changefreq>
+    <loc>https://mydigitalid.my.id/blog/</loc>
+    <lastmod>2026-07-11</lastmod>
+    <changefreq>weekly</changefreq>
     <priority>0.8</priority>
   </url>
   <url>
-    <loc>https://launchpage-studio.com/demo/salon</loc>
+    <loc>https://mydigitalid.my.id/blog/cara-bikin-landing-page-umkm-modal-hp.html</loc>
+    <lastmod>2026-07-11</lastmod>
     <changefreq>monthly</changefreq>
-    <priority>0.8</priority>
+    <priority>0.6</priority>
   </url>
   <url>
-    <loc>https://launchpage-studio.com/demo/freelancer</loc>
+    <loc>https://mydigitalid.my.id/blog/landing-page-vs-toko-online-umkm.html</loc>
+    <lastmod>2026-07-11</lastmod>
     <changefreq>monthly</changefreq>
-    <priority>0.8</priority>
+    <priority>0.6</priority>
   </url>
   <url>
-    <loc>https://launchpage-studio.com/demo/dimsum</loc>
+    <loc>https://mydigitalid.my.id/blog/6-kesalahan-landing-page-pemula.html</loc>
+    <lastmod>2026-07-11</lastmod>
     <changefreq>monthly</changefreq>
-    <priority>0.8</priority>
-  </url>
-  <url>
-    <loc>https://launchpage-studio.com/demo/bengkel</loc>
-    <changefreq>monthly</changefreq>
-    <priority>0.8</priority>
+    <priority>0.6</priority>
   </url>
 </urlset>
