@@ -3,6 +3,10 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <link rel="icon" type="image/x-icon" href="/favicon.ico">
+  <link rel="icon" type="image/png" sizes="32x32" href="/assets/favicon-32x32.png">
+  <link rel="icon" type="image/png" sizes="192x192" href="/assets/favicon-192x192.png">
+  <link rel="apple-touch-icon" sizes="180x180" href="/assets/apple-touch-icon.png">
   <title>Invoice Generator — My Digital ID Page</title>
   <script src="../client/supabase.js"></script>
   <script>
@@ -108,7 +112,7 @@
       border-radius:20px; padding:40px 32px;
       max-width:380px; width:100%; text-align:center;
     }
-    .login-box .lock-icon { font-size:2.5rem; margin-bottom:12px; }
+    .login-box .logo-img { width:100px; height:100px; margin:0 auto 16px; display:block; border-radius:50%; object-fit:cover; }
     .login-box h2 { font-size:1.2rem; color:#e2e8f0; margin-bottom:4px; }
     .login-box p { font-size:0.85rem; color:#64748b; margin-bottom:24px; }
     .login-box input {
@@ -128,7 +132,7 @@
     <!-- ============ LOGIN SCREEN (Supabase Auth) ============ -->
     <div class="login-screen" id="loginScreen">
       <div class="login-box">
-        <div class="lock-icon">🔐</div>
+        <img src="/assets/logo-120.png" alt="My Digital ID Page" class="logo-img">
         <div id="loginView">
           <h2>Login Admin</h2>
           <p>Masuk dengan email & password</p>
