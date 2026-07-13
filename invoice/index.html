@@ -1,0 +1,448 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Invoice Generator — My Digital ID Page</title>
+  <script src="https://unpkg.com/@supabase/supabase-js@2"></script>
+  <script src="../client/supabase-config.js"></script>
+  <style>
+    * { margin:0; padding:0; box-sizing:border-box; }
+    body {
+      font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+      background: #0a0a0f; color: #e2e8f0; padding: 20px;
+    }
+    .container { max-width: 960px; margin: 0 auto; }
+
+    .header { display:flex; justify-content:space-between; align-items:center; margin-bottom:24px; flex-wrap:wrap; gap:12px; }
+    .header h1 { font-size:1.3rem; }
+    .header h1 span { color:#8B5CF6; }
+    .header-actions { display:flex; gap:8px; }
+
+    .btn {
+      padding:10px 20px; border:none; border-radius:10px;
+      font-weight:600; cursor:pointer; font-size:0.9rem;
+      transition:0.2s; display:inline-flex; align-items:center; gap:6px; text-decoration:none;
+    }
+    .btn-primary { background:#8B5CF6; color:#fff; }
+    .btn-primary:hover { filter:brightness(1.1); }
+    .btn-success { background:#10b981; color:#fff; }
+    .btn-outline { background:transparent; border:1px solid rgba(255,255,255,0.1); color:#94a3b8; }
+    .btn-outline:hover { border-color:#8B5CF6; color:#8B5CF6; }
+    .btn-sm { padding:6px 12px; font-size:0.8rem; }
+    .btn-danger { background:#ef4444; color:#fff; }
+    .btn-warning { background:#f59e0b; color:#1e293b; }
+
+    /* Stats */
+    .stats { display:grid; grid-template-columns:repeat(auto-fit, minmax(140px, 1fr)); gap:12px; margin-bottom:24px; }
+    .stat-card { background:linear-gradient(135deg,#13132a,#1a1a35); border:1px solid rgba(255,255,255,0.06); border-radius:12px; padding:16px; text-align:center; }
+    .stat-card .angka { font-size:1.5rem; font-weight:800; color:#8B5CF6; }
+    .stat-card .label { font-size:0.7rem; color:#64748b; text-transform:uppercase; letter-spacing:0.05em; margin-top:4px; }
+
+    /* Table */
+    .table-wrap { background:linear-gradient(135deg,#13132a,#1a1a35); border:1px solid rgba(255,255,255,0.06); border-radius:16px; overflow:hidden; }
+    table { width:100%; border-collapse:collapse; }
+    th { text-align:left; padding:12px 16px; font-size:0.75rem; color:#64748b; text-transform:uppercase; letter-spacing:0.05em; border-bottom:1px solid rgba(255,255,255,0.06); }
+    td { padding:12px 16px; border-bottom:1px solid rgba(255,255,255,0.03); font-size:0.85rem; }
+    tr:last-child td { border-bottom:none; }
+    tr:hover td { background:rgba(255,255,255,0.02); }
+
+    .status { display:inline-block; padding:3px 10px; border-radius:20px; font-size:0.75rem; font-weight:600; }
+    .status-draft { background:rgba(100,116,139,0.1); color:#64748b; }
+    .status-dikirim { background:rgba(59,130,246,0.1); color:#60a5fa; }
+    .status-lunas { background:rgba(16,185,129,0.1); color:#10b981; }
+    .status-batal { background:rgba(239,68,68,0.1); color:#ef4444; }
+
+    .empty { text-align:center; padding:60px 20px; color:#475569; }
+    .empty .icon { font-size:3rem; margin-bottom:8px; }
+
+    .notif {
+      position:fixed; top:20px; left:50%; transform:translateX(-50%);
+      padding:12px 24px; border-radius:12px;
+      font-weight:600; font-size:0.9rem; z-index:2000;
+      transition:0.3s; display:none;
+    }
+    .notif-success { background:#064e3b; color:#34d399; display:block; }
+    .notif-error { background:#7f1d1d; color:#f87171; display:block; }
+
+    /* Invoice Form */
+    .section { background:linear-gradient(135deg,#13132a,#1a1a35); border:1px solid rgba(255,255,255,0.06); border-radius:16px; padding:24px; margin-bottom:24px; }
+    .section h2 { font-size:1rem; margin-bottom:16px; color:#fff; }
+    .form-row { display:grid; grid-template-columns:1fr 1fr; gap:12px; margin-bottom:12px; }
+    .form-group { margin-bottom:12px; }
+    .form-group label { display:block; font-size:0.8rem; color:#64748b; margin-bottom:6px; }
+    .form-group input, .form-group select, .form-group textarea {
+      width:100%; padding:10px 12px; border:1px solid rgba(255,255,255,0.08);
+      border-radius:10px; background:rgba(255,255,255,0.03);
+      color:#e2e8f0; font-size:0.9rem; outline:none;
+    }
+    .form-group input:focus, .form-group select:focus { border-color:#8B5CF6; }
+    .form-group textarea { resize:vertical; min-height:60px; }
+
+    .item-row { display:grid; grid-template-columns:3fr 1fr 1fr 1fr auto; gap:8px; align-items:end; margin-bottom:8px; }
+    .item-row .form-group { margin-bottom:0; }
+    .item-total { padding:10px 0; font-weight:600; color:#e2e8f0; text-align:right; }
+
+    .grand-total { text-align:right; font-size:1.2rem; font-weight:700; color:#8B5CF6; margin-top:12px; padding-top:12px; border-top:1px solid rgba(255,255,255,0.06); }
+
+    .hidden { display:none; }
+    #formSection.hidden, #listSection.hidden { display:none; }
+
+    .tab-bar { display:flex; gap:0; margin-bottom:24px; border-radius:12px; overflow:hidden; border:1px solid rgba(255,255,255,0.06); }
+    .tab-bar button { flex:1; padding:12px; border:none; background:rgba(255,255,255,0.03); color:#64748b; font-weight:600; cursor:pointer; font-size:0.9rem; transition:0.2s; }
+    .tab-bar button.active { background:#8B5CF6; color:#fff; }
+  </style>
+</head>
+<body>
+  <div class="container">
+    <!-- Header -->
+    <div class="header">
+      <div>
+        <h1>🧾 <span>Invoice</span> Management</h1>
+        <div class="badge" style="font-size:0.75rem;background:rgba(255,255,255,0.06);padding:4px 12px;border-radius:20px;color:#64748b;display:inline-block;margin-top:4px">My Digital ID Page</div>
+      </div>
+      <div class="header-actions">
+        <a href="../client/" class="btn btn-outline">📋 Client</a>
+        <a href="../" class="btn btn-outline">← Website</a>
+      </div>
+    </div>
+
+    <!-- Stats -->
+    <div class="stats" id="stats"></div>
+
+    <!-- Tab Bar -->
+    <div class="tab-bar">
+      <button class="active" onclick="showTab('list')">📋 Daftar Invoice</button>
+      <button onclick="showTab('form')">➕ Buat Invoice Baru</button>
+    </div>
+
+    <!-- LIST TAB -->
+    <div id="listSection">
+      <div class="table-wrap">
+        <table>
+          <thead>
+            <tr>
+              <th>No. Invoice</th>
+              <th>Client</th>
+              <th>Total</th>
+              <th>Status</th>
+              <th>Tanggal</th>
+              <th>Jatuh Tempo</th>
+              <th>Aksi</th>
+            </tr>
+          </thead>
+          <tbody id="invoiceTable"></tbody>
+        </table>
+        <div class="empty" id="emptyState">
+          <div class="icon">🧾</div>
+          <p>Belum ada invoice. Klik "Buat Invoice Baru"!</p>
+        </div>
+      </div>
+    </div>
+
+    <!-- FORM TAB -->
+    <div id="formSection" class="hidden">
+      <form onsubmit="generateInvoice(event)">
+        <div class="section">
+          <h2>📋 Data Client</h2>
+          <div class="form-row">
+            <div class="form-group">
+              <label>Pilih Client *</label>
+              <select id="fClient" onchange="fillClientData()" required>
+                <option value="">— Pilih Client —</option>
+              </select>
+            </div>
+            <div class="form-group">
+              <label>Nama Client</label>
+              <input id="fClientNama" readonly style="opacity:0.7">
+            </div>
+          </div>
+          <div class="form-row">
+            <div class="form-group">
+              <label>Nama Usaha</label>
+              <input id="fClientUsaha" readonly style="opacity:0.7">
+            </div>
+            <div class="form-group">
+              <label>Alamat</label>
+              <input id="fClientAlamat" readonly style="opacity:0.7">
+            </div>
+          </div>
+        </div>
+
+        <div class="section">
+          <h2>📅 Tanggal Invoice</h2>
+          <div class="form-row">
+            <div class="form-group">
+              <label>Tanggal Invoice</label>
+              <input id="fTglInvoice" type="date">
+            </div>
+            <div class="form-group">
+              <label>Jatuh Tempo</label>
+              <input id="fJatuhTempo" type="date">
+            </div>
+          </div>
+        </div>
+
+        <div class="section">
+          <h2>📦 Item / Layanan</h2>
+          <div id="itemsContainer">
+            <div class="item-row">
+              <div class="form-group">
+                <label>Deskripsi</label>
+                <input class="item-desc" placeholder="Mis: Paket Basic Landing Page" value="Paket Basic Landing Page - 1 Tahun">
+              </div>
+              <div class="form-group">
+                <label>Jumlah</label>
+                <input class="item-qty" type="number" value="1" min="1" onchange="calcItems()">
+              </div>
+              <div class="form-group">
+                <label>Harga</label>
+                <input class="item-price" type="number" value="99000" onchange="calcItems()">
+              </div>
+              <div class="item-total" style="padding-top:27px">Rp0</div>
+              <button type="button" class="btn btn-sm btn-danger" onclick="removeItem(this)" style="margin-bottom:0;height:38px">✕</button>
+            </div>
+          </div>
+          <button type="button" class="btn btn-sm btn-outline" onclick="addItem()" style="margin-top:8px">+ Tambah Item</button>
+          <div class="grand-total" id="grandTotal">Total: Rp0</div>
+        </div>
+
+        <div class="section">
+          <h2>📝 Catatan</h2>
+          <div class="form-group">
+            <textarea id="fCatatan" placeholder="Terima kasih sudah mempercayakan website Anda kepada My Digital ID Page"></textarea>
+          </div>
+        </div>
+
+        <div style="display:flex;gap:8px;justify-content:flex-end;margin-bottom:24px">
+          <button type="button" class="btn btn-outline" onclick="showTab('list')">← Batal</button>
+          <button type="submit" class="btn btn-primary">🧾 Generate & Cetak Invoice</button>
+        </div>
+      </form>
+    </div>
+  </div>
+
+  <div id="notif" class="notif"></div>
+
+  <script>
+    let clients = [];
+    let invoices = [];
+
+    function notif(msg, type='success') {
+      const el = document.getElementById('notif');
+      el.textContent = msg;
+      el.className = 'notif notif-' + type;
+      setTimeout(() => el.className = 'notif', 3000);
+    }
+
+    function rupiah(n) {
+      return 'Rp' + Number(n).toLocaleString('id-ID');
+    }
+
+    function showTab(tab) {
+      document.getElementById('listSection').classList.toggle('hidden', tab !== 'list');
+      document.getElementById('formSection').classList.toggle('hidden', tab !== 'form');
+      document.querySelectorAll('.tab-bar button').forEach((b,i) => {
+        b.classList.toggle('active', (i===0 && tab==='list') || (i===1 && tab==='form'));
+      });
+      if (tab === 'list') loadInvoices();
+      if (tab === 'form') loadClientDropdown();
+    }
+
+    // === CLIENT DROPDOWN ===
+    async function loadClientDropdown() {
+      const { data } = await supabase.from('clients').select('id,nama,usaha,alamat').order('nama');
+      clients = data || [];
+      const sel = document.getElementById('fClient');
+      sel.innerHTML = '<option value="">— Pilih Client —</option>' +
+        clients.map(c => `<option value="${c.id}">${c.nama}${c.usaha ? ' — ' + c.usaha : ''}</option>`).join('');
+    }
+
+    function fillClientData() {
+      const id = parseInt(document.getElementById('fClient').value);
+      const c = clients.find(x => x.id === id);
+      document.getElementById('fClientNama').value = c ? c.nama : '';
+      document.getElementById('fClientUsaha').value = c ? c.usaha : '';
+      document.getElementById('fClientAlamat').value = c ? c.alamat : '';
+    }
+
+    // === ITEMS ===
+    function addItem(desc = '', qty = 1, price = 0) {
+      const container = document.getElementById('itemsContainer');
+      const div = document.createElement('div');
+      div.className = 'item-row';
+      div.innerHTML = `
+        <div class="form-group">
+          <label>Deskripsi</label>
+          <input class="item-desc" placeholder="Mis: Paket Basic Landing Page" value="${desc}">
+        </div>
+        <div class="form-group">
+          <label>Jumlah</label>
+          <input class="item-qty" type="number" value="${qty}" min="1" onchange="calcItems()">
+        </div>
+        <div class="form-group">
+          <label>Harga</label>
+          <input class="item-price" type="number" value="${price}" onchange="calcItems()">
+        </div>
+        <div class="item-total" style="padding-top:27px">Rp0</div>
+        <button type="button" class="btn btn-sm btn-danger" onclick="removeItem(this)" style="margin-bottom:0;height:38px">✕</button>
+      `;
+      container.appendChild(div);
+      calcItems();
+    }
+
+    function removeItem(btn) {
+      const rows = document.querySelectorAll('.item-row');
+      if (rows.length <= 1) { notif('Minimal 1 item', 'error'); return; }
+      btn.closest('.item-row').remove();
+      calcItems();
+    }
+
+    function calcItems() {
+      const rows = document.querySelectorAll('.item-row');
+      let total = 0;
+      rows.forEach(row => {
+        const qty = parseInt(row.querySelector('.item-qty').value) || 0;
+        const price = parseInt(row.querySelector('.item-price').value) || 0;
+        const subtotal = qty * price;
+        total += subtotal;
+        row.querySelector('.item-total').textContent = rupiah(subtotal);
+      });
+      document.getElementById('grandTotal').textContent = 'Total: ' + rupiah(total);
+      return total;
+    }
+
+    // === GENERATE & SAVE ===
+    async function generateInvoice(e) {
+      e.preventDefault();
+
+      const clientId = parseInt(document.getElementById('fClient').value);
+      if (!clientId) { notif('Pilih client dulu!', 'error'); return; }
+
+      const client = clients.find(c => c.id === clientId);
+      const rows = document.querySelectorAll('.item-row');
+      const items = [];
+      let total = 0;
+
+      rows.forEach(row => {
+        const desc = row.querySelector('.item-desc').value.trim();
+        const qty = parseInt(row.querySelector('.item-qty').value) || 0;
+        const price = parseInt(row.querySelector('.item-price').value) || 0;
+        if (desc && qty > 0) {
+          items.push({ deskripsi: desc, qty, harga: price, subtotal: qty * price });
+          total += qty * price;
+        }
+      });
+
+      if (items.length === 0) { notif('Minimal 1 item', 'error'); return; }
+
+      // Generate nomor invoice dari Supabase
+      const { data: invData, error: invError } = await supabase.rpc('generate_nomor_invoice');
+
+      let nomorInvoice;
+      if (invError || !invData) {
+        // Fallback: manual
+        const now = new Date();
+        const yymm = now.getFullYear().toString().slice(-2) + String(now.getMonth()+1).padStart(2,'0');
+        const rand = String(Math.floor(Math.random() * 9999)).padStart(4, '0');
+        nomorInvoice = 'MID/' + yymm + '/' + rand;
+      } else {
+        nomorInvoice = invData;
+      }
+
+      // Ambil WA dari client
+      const { data: clientData } = await supabase.from('clients').select('no_wa').eq('id', clientId).single();
+
+      const invoiceData = {
+        nomor_invoice: nomorInvoice,
+        client_id: clientId,
+        client_nama: client.nama,
+        client_usaha: client.usaha,
+        client_alamat: client.alamat,
+        items: JSON.stringify(items),
+        subtotal: total,
+        diskon: 0,
+        total: total,
+        status: 'draft',
+        tgl_invoice: document.getElementById('fTglInvoice').value,
+        tgl_jatuh_tempo: document.getElementById('fJatuhTempo').value,
+        catatan: document.getElementById('fCatatan').value.trim(),
+        client_wa: clientData?.no_wa || '',
+      };
+
+      const { data: saved, error: saveError } = await supabase.from('invoices').insert(invoiceData).select().single();
+      if (saveError) { notif('Gagal simpan: ' + saveError.message, 'error'); return; }
+
+      notif('✅ Invoice tersimpan!');
+      // Buka cetak
+      window.open(`print.html?id=${saved.id}`, '_blank');
+      showTab('list');
+    }
+
+    // === LOAD INVOICES ===
+    async function loadInvoices() {
+      const { data } = await supabase.from('invoices').select('*').order('created_at', { ascending: false });
+      invoices = data || [];
+      renderStats();
+      renderInvoiceTable();
+    }
+
+    function renderStats() {
+      const total = invoices.length;
+      const lunas = invoices.filter(i => i.status === 'lunas').length;
+      const dikirim = invoices.filter(i => i.status === 'dikirim').length;
+      const totalPendapatan = invoices.filter(i => i.status === 'lunas').reduce((s, i) => s + i.total, 0);
+
+      document.getElementById('stats').innerHTML = `
+        <div class="stat-card"><div class="angka">${total}</div><div class="label">Total Invoice</div></div>
+        <div class="stat-card"><div class="angka">${dikirim}</div><div class="label">Dikirim</div></div>
+        <div class="stat-card"><div class="angka">${lunas}</div><div class="label">Lunas</div></div>
+        <div class="stat-card"><div class="angka">${rupiah(totalPendapatan)}</div><div class="label">Pendapatan (Lunas)</div></div>
+      `;
+    }
+
+    async function updateStatus(id, status) {
+      const data = status === 'lunas' ? { status, tgl_lunas: new Date().toISOString().split('T')[0] } : { status };
+      await supabase.from('invoices').update(data).eq('id', id);
+      notif(`Status → ${status}`);
+      loadInvoices();
+    }
+
+    function renderInvoiceTable() {
+      const tbody = document.getElementById('invoiceTable');
+      const empty = document.getElementById('emptyState');
+      if (invoices.length === 0) { tbody.innerHTML = ''; empty.style.display = 'block'; return; }
+      empty.style.display = 'none';
+
+      const statusLabel = { draft:'Draft', dikirim:'Dikirim', lunas:'Lunas', batal:'Batal' };
+
+      tbody.innerHTML = invoices.map(i => `
+        <tr>
+          <td style="font-weight:600;color:#e2e8f0">${i.nomor_invoice}</td>
+          <td>${i.client_nama}</td>
+          <td style="font-weight:600;color:#e2e8f0">${rupiah(i.total)}</td>
+          <td><span class="status status-${i.status}">${statusLabel[i.status]}</span></td>
+          <td style="color:#94a3b8;font-size:0.8rem">${i.tgl_invoice}</td>
+          <td style="color:#94a3b8;font-size:0.8rem">${i.tgl_jatuh_tempo}</td>
+          <td>
+            <div style="display:flex;gap:4px">
+              <a href="print.html?id=${i.id}" target="_blank" class="btn btn-sm btn-primary">🖨️</a>
+              ${i.status !== 'lunas' ? `<button class="btn btn-sm btn-success" onclick="updateStatus(${i.id},'lunas')">✓</button>` : ''}
+              <a href="https://wa.me/${i.client_wa || ''}?text=Halo%20${encodeURIComponent(i.client_nama)}%2C%20ini%20invoice%20dari%20My%20Digital%20ID%20Page" target="_blank" class="btn btn-sm btn-warning">💬</a>
+            </div>
+          </td>
+        </tr>
+      `).join('');
+    }
+
+    // Init dates
+    document.getElementById('fTglInvoice').value = new Date().toISOString().split('T')[0];
+    const nextWeek = new Date(); nextWeek.setDate(nextWeek.getDate() + 7);
+    document.getElementById('fJatuhTempo').value = nextWeek.toISOString().split('T')[0];
+
+    // Init
+    loadInvoices();
+    loadClientDropdown();
+  </script>
+</body>
+</html>

@@ -1,0 +1,345 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Invoice — My Digital ID Page</title>
+  <script src="https://unpkg.com/@supabase/supabase-js@2"></script>
+  <script src="../client/supabase-config.js"></script>
+  <style>
+    * { margin:0; padding:0; box-sizing:border-box; }
+    body {
+      font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+      background: #0a0a0f;
+      color: #e2e8f0;
+      padding: 40px 20px;
+    }
+    .invoice-wrap {
+      max-width: 210mm;
+      margin: 0 auto;
+      background: #fff;
+      color: #1e293b;
+      border-radius: 12px;
+      padding: 48px;
+      box-shadow: 0 20px 60px rgba(0,0,0,0.3);
+    }
+
+    /* Header */
+    .invoice-header {
+      display: flex;
+      justify-content: space-between;
+      align-items: flex-start;
+      margin-bottom: 40px;
+      padding-bottom: 24px;
+      border-bottom: 2px solid #f1f5f9;
+    }
+    .brand h1 {
+      font-size: 1.5rem;
+      color: #8B5CF6;
+      margin-bottom: 4px;
+    }
+    .brand .tagline {
+      font-size: 0.8rem;
+      color: #64748b;
+    }
+    .invoice-title {
+      text-align: right;
+    }
+    .invoice-title h2 {
+      font-size: 2rem;
+      color: #0f172a;
+      text-transform: uppercase;
+      letter-spacing: 0.05em;
+    }
+    .invoice-title .nomor {
+      font-size: 0.85rem;
+      color: #64748b;
+      margin-top: 4px;
+    }
+
+    /* Info */
+    .info-row {
+      display: flex;
+      justify-content: space-between;
+      margin-bottom: 32px;
+    }
+    .info-block h3 {
+      font-size: 0.75rem;
+      text-transform: uppercase;
+      letter-spacing: 0.05em;
+      color: #94a3b8;
+      margin-bottom: 8px;
+    }
+    .info-block p {
+      font-size: 0.9rem;
+      color: #334155;
+      line-height: 1.6;
+    }
+    .info-block .nama {
+      font-size: 1.1rem;
+      font-weight: 700;
+      color: #0f172a;
+    }
+
+    /* Dates */
+    .dates {
+      display: flex;
+      gap: 32px;
+      margin-bottom: 32px;
+      padding: 16px 20px;
+      background: #f8fafc;
+      border-radius: 8px;
+    }
+    .dates .item {
+      font-size: 0.8rem;
+      color: #64748b;
+    }
+    .dates .item strong {
+      display: block;
+      font-size: 0.95rem;
+      color: #0f172a;
+      margin-top: 2px;
+    }
+
+    /* Table */
+    table {
+      width: 100%;
+      border-collapse: collapse;
+      margin-bottom: 24px;
+    }
+    th {
+      text-align: left;
+      padding: 12px 16px;
+      font-size: 0.75rem;
+      text-transform: uppercase;
+      letter-spacing: 0.05em;
+      color: #94a3b8;
+      border-bottom: 2px solid #e2e8f0;
+    }
+    td {
+      padding: 14px 16px;
+      border-bottom: 1px solid #f1f5f9;
+      font-size: 0.9rem;
+      color: #334155;
+    }
+    td:last-child, th:last-child { text-align: right; }
+    td:nth-child(2), th:nth-child(2) { text-align: center; }
+    td:nth-child(3), th:nth-child(3) { text-align: right; }
+    .total-row td {
+      font-weight: 700;
+      font-size: 1.1rem;
+      color: #0f172a;
+      border-bottom: none;
+      padding-top: 20px;
+    }
+    .total-row td:last-child {
+      color: #8B5CF6;
+      font-size: 1.3rem;
+    }
+
+    /* Notes */
+    .notes {
+      margin-top: 24px;
+      padding-top: 24px;
+      border-top: 1px solid #e2e8f0;
+    }
+    .notes h4 {
+      font-size: 0.75rem;
+      text-transform: uppercase;
+      color: #94a3b8;
+      margin-bottom: 8px;
+    }
+    .notes p {
+      font-size: 0.85rem;
+      color: #64748b;
+      line-height: 1.6;
+    }
+
+    /* Footer */
+    .invoice-footer {
+      margin-top: 40px;
+      padding-top: 24px;
+      border-top: 2px solid #f1f5f9;
+      text-align: center;
+    }
+    .invoice-footer .payment-info {
+      font-size: 0.85rem;
+      color: #64748b;
+      margin-bottom: 8px;
+    }
+    .invoice-footer .payment-info strong {
+      color: #334155;
+    }
+    .invoice-footer .brand-foot {
+      font-size: 0.75rem;
+      color: #94a3b8;
+    }
+
+    /* Loading state */
+    .loading {
+      text-align: center;
+      padding: 60px;
+      color: #64748b;
+    }
+    .loading .spinner {
+      display: inline-block;
+      width: 24px;
+      height: 24px;
+      border: 3px solid rgba(139,92,246,0.2);
+      border-top-color: #8B5CF6;
+      border-radius: 50%;
+      animation: spin 0.8s linear infinite;
+      margin-bottom: 12px;
+    }
+    @keyframes spin { to { transform: rotate(360deg); } }
+
+    .error {
+      text-align: center;
+      padding: 60px;
+      color: #ef4444;
+    }
+
+    .btn-print {
+      display: block;
+      width: 100%;
+      max-width: 210mm;
+      margin: 20px auto 0;
+      padding: 14px;
+      background: #8B5CF6;
+      color: #fff;
+      border: none;
+      border-radius: 10px;
+      font-size: 1rem;
+      font-weight: 600;
+      cursor: pointer;
+    }
+    .btn-print:hover { filter: brightness(1.1); }
+
+    @media print {
+      body { background: #fff; padding: 0; }
+      .invoice-wrap { box-shadow: none; border-radius: 0; padding: 40px; }
+      .btn-print { display: none; }
+    }
+  </style>
+</head>
+<body>
+  <button class="btn-print" onclick="window.print()">🖨️ Cetak / Simpan PDF</button>
+  <div id="loading" class="loading">
+    <div class="spinner"></div>
+    <p>Memuat invoice...</p>
+  </div>
+  <div id="error" class="error hidden">Invoice tidak ditemukan</div>
+  <div id="invoiceContent" class="invoice-wrap" style="display:none"></div>
+
+  <script>
+    const params = new URLSearchParams(window.location.search);
+    const id = params.get('id');
+
+    if (!id) {
+      document.getElementById('loading').style.display = 'none';
+      document.getElementById('error').classList.remove('hidden');
+      document.getElementById('error').textContent = 'Parameter ID tidak ditemukan';
+    }
+
+    function rupiah(n) {
+      return 'Rp' + Number(n).toLocaleString('id-ID');
+    }
+
+    async function loadInvoice() {
+      try {
+        const { data } = await supabase.from('invoices').select('*').eq('id', id).single();
+
+        if (!data) throw new Error('Not found');
+
+        document.getElementById('loading').style.display = 'none';
+        const el = document.getElementById('invoiceContent');
+        el.style.display = 'block';
+
+        const items = typeof data.items === 'string' ? JSON.parse(data.items) : data.items;
+
+        el.innerHTML = `
+          <!-- Header -->
+          <div class="invoice-header">
+            <div class="brand">
+              <h1>◆ My Digital ID Page</h1>
+              <div class="tagline">Jasa Pembuatan Landing Page Profesional</div>
+            </div>
+            <div class="invoice-title">
+              <h2>INVOICE</h2>
+              <div class="nomor">${data.nomor_invoice}</div>
+            </div>
+          </div>
+
+          <!-- Info -->
+          <div class="info-row">
+            <div class="info-block">
+              <h3>Kepada</h3>
+              <p class="nama">${data.client_nama}</p>
+              <p>${data.client_usaha || ''}</p>
+              <p>${data.client_alamat || ''}</p>
+            </div>
+          </div>
+
+          <!-- Dates -->
+          <div class="dates">
+            <div class="item">Tanggal Invoice <strong>${data.tgl_invoice}</strong></div>
+            <div class="item">Jatuh Tempo <strong>${data.tgl_jatuh_tempo}</strong></div>
+            <div class="item">Status <strong style="color:${data.status === 'lunas' ? '#10b981' : data.status === 'dikirim' ? '#3b82f6' : '#64748b'}">${data.status.charAt(0).toUpperCase() + data.status.slice(1)}</strong></div>
+          </div>
+
+          <!-- Items -->
+          <table>
+            <thead>
+              <tr>
+                <th>Deskripsi</th>
+                <th style="text-align:center">Qty</th>
+                <th style="text-align:right">Harga</th>
+                <th style="text-align:right">Subtotal</th>
+              </tr>
+            </thead>
+            <tbody>
+              ${items.map(item => `
+                <tr>
+                  <td>${item.deskripsi}</td>
+                  <td style="text-align:center">${item.qty}</td>
+                  <td style="text-align:right">${rupiah(item.harga)}</td>
+                  <td style="text-align:right">${rupiah(item.subtotal)}</td>
+                </tr>
+              `).join('')}
+              <tr class="total-row">
+                <td colspan="3" style="text-align:right">Total</td>
+                <td style="text-align:right">${rupiah(data.total)}</td>
+              </tr>
+            </tbody>
+          </table>
+
+          ${data.catatan ? `
+            <div class="notes">
+              <h4>Catatan</h4>
+              <p>${data.catatan}</p>
+            </div>
+          ` : ''}
+
+          <!-- Footer -->
+          <div class="invoice-footer">
+            <div class="payment-info">
+              <strong>My Digital ID Page</strong><br>
+              WA: 0819-9329-5352 | Email: hello@mydigitalid.my.id<br>
+              ${data.status !== 'lunas' ? 'Pembayaran: BCA 1234567890 a.n. My Digital ID Page' : '✓ LUNAS'}
+            </div>
+            <div class="brand-foot">
+              ${data.nomor_invoice} • mydigitalid.my.id
+            </div>
+          </div>
+        `;
+      } catch (e) {
+        document.getElementById('loading').style.display = 'none';
+        document.getElementById('error').classList.remove('hidden');
+        document.getElementById('error').textContent = 'Invoice tidak ditemukan atau gagal dimuat';
+      }
+    }
+
+    loadInvoice();
+  </script>
+</body>
+</html>
