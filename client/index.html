@@ -149,10 +149,7 @@
     }
     .login-box input:focus { border-color:#8B5CF6; }
     .login-box .login-error { color:#ef4444; font-size:0.8rem; margin-top:-8px; margin-bottom:12px; display:none; }
-    .login-box .login-success { color:#34d399; font-size:0.85rem; margin-top:-8px; margin-bottom:12px; display:none; }
     .login-box .btn { width:100%; padding:14px; font-size:1rem; margin-bottom:8px; }
-    .login-box .link { color:#64748b; font-size:0.85rem; cursor:pointer; }
-    .login-box .link:hover { color:#8B5CF6; }
   </style>
 </head>
 <body>
@@ -168,17 +165,6 @@
         <input type="password" id="loginPassword" placeholder="Password" autocomplete="current-password" onkeydown="if(event.key==='Enter')login()">
         <div class="login-error" id="loginError">Email atau password salah</div>
         <button class="btn btn-primary" onclick="login()" id="loginBtn">Masuk</button>
-        <div><span class="link" onclick="showRegister()">Belum punya akun? Daftar</span></div>
-      </div>
-      <div id="registerView" style="display:none">
-        <h2>Daftar Akun</h2>
-        <p>Buat akun admin baru</p>
-        <input type="email" id="regEmail" placeholder="Email" autocomplete="email">
-        <input type="password" id="regPassword" placeholder="Password (min 6 karakter)" autocomplete="new-password" onkeydown="if(event.key==='Enter')register()">
-        <div class="login-error" id="regError"></div>
-        <div class="login-success" id="regSuccess">Pendaftaran berhasil! Cek email untuk konfirmasi.</div>
-        <button class="btn btn-primary" onclick="register()" id="regBtn">Daftar</button>
-        <div><span class="link" onclick="showLogin()">Sudah punya akun? Masuk</span></div>
       </div>
     </div>
   </div>
@@ -339,15 +325,7 @@
 
     function showLogin() {
       document.getElementById('loginView').style.display = 'block';
-      document.getElementById('registerView').style.display = 'none';
       document.getElementById('loginError').style.display = 'none';
-    }
-
-    function showRegister() {
-      document.getElementById('loginView').style.display = 'none';
-      document.getElementById('registerView').style.display = 'block';
-      document.getElementById('regError').style.display = 'none';
-      document.getElementById('regSuccess').style.display = 'none';
     }
 
     async function login() {
@@ -361,25 +339,6 @@
       if (error) {
         document.getElementById('loginError').textContent = error.message === 'Invalid login credentials' ? 'Email atau password salah' : error.message;
         document.getElementById('loginError').style.display = 'block';
-      }
-    }
-
-    async function register() {
-      const email = document.getElementById('regEmail').value.trim();
-      const password = document.getElementById('regPassword').value;
-      const btn = document.getElementById('regBtn');
-      document.getElementById('regError').style.display = 'none';
-      document.getElementById('regSuccess').style.display = 'none';
-      if (!email || !password) { document.getElementById('regError').textContent = 'Isi email & password'; document.getElementById('regError').style.display = 'block'; return; }
-      if (password.length < 6) { document.getElementById('regError').textContent = 'Password minimal 6 karakter'; document.getElementById('regError').style.display = 'block'; return; }
-      btn.disabled = true; btn.textContent = '⏳';
-      const { error } = await supabase.auth.signUp({ email, password });
-      btn.disabled = false; btn.textContent = 'Daftar';
-      if (error) {
-        document.getElementById('regError').textContent = error.message;
-        document.getElementById('regError').style.display = 'block';
-      } else {
-        document.getElementById('regSuccess').style.display = 'block';
       }
     }
 
