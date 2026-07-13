@@ -1,12 +1,12 @@
 -- =========================================================
 -- 📋 My Digital ID Page — Client & Invoice System
 -- =========================================================
--- Jalankan SQL ini di Supabase SQL Editor (satu kali)
--- =========================================================
+-- Jalankan SQL ini di Supabase SQL Editor setelah login sebagai admin.
 
--- 1. TABEL CLIENT
+-- Buat tabel clients
 CREATE TABLE IF NOT EXISTS clients (
   id BIGSERIAL PRIMARY KEY,
+  user_id UUID REFERENCES auth.users(id) ON DELETE CASCADE,
   nama TEXT NOT NULL,
   usaha TEXT DEFAULT '',
   no_wa TEXT DEFAULT '',
@@ -22,9 +22,10 @@ CREATE TABLE IF NOT EXISTS clients (
   updated_at TIMESTAMPTZ DEFAULT NOW()
 );
 
--- 2. TABEL INVOICE
+-- Buat tabel invoices
 CREATE TABLE IF NOT EXISTS invoices (
   id BIGSERIAL PRIMARY KEY,
+  user_id UUID REFERENCES auth.users(id) ON DELETE CASCADE,
   nomor_invoice TEXT UNIQUE NOT NULL,
   client_id INTEGER REFERENCES clients(id),
   client_nama TEXT NOT NULL,
@@ -50,14 +51,7 @@ CREATE INDEX IF NOT EXISTS idx_clients_status ON clients(status);
 CREATE INDEX IF NOT EXISTS idx_invoices_status ON invoices(status);
 CREATE INDEX IF NOT EXISTS idx_invoices_client ON invoices(client_id);
 
--- Row Level Security
-ALTER TABLE clients ENABLE ROW LEVEL SECURITY;
-ALTER TABLE invoices ENABLE ROW LEVEL SECURITY;
-
-CREATE POLICY "public_all_clients" ON clients FOR ALL USING (true);
-CREATE POLICY "public_all_invoices" ON invoices FOR ALL USING (true);
-
--- Function: generate nomor invoice (MID/YYMM/XXXX)
+-- Buat fungsi generate nomor invoice
 CREATE OR REPLACE FUNCTION generate_nomor_invoice()
 RETURNS TEXT AS $$
 DECLARE
@@ -69,7 +63,47 @@ BEGIN
   INTO seq_num
   FROM invoices
   WHERE nomor_invoice LIKE 'MID/' || year_month || '/%';
-
   RETURN 'MID/' || year_month || '/' || LPAD(seq_num::TEXT, 4, '0');
 END;
 $$ LANGUAGE plpgsql;
+
+-- =========================================================
+-- 🔐 Row Level Security
+-- =========================================================
+
+-- Enable RLS
+ALTER TABLE clients ENABLE ROW LEVEL SECURITY;
+ALTER TABLE invoices ENABLE ROW LEVEL SECURITY;
+
+-- Hapus policy lama (kalo ada)
+DROP POLICY IF EXISTS "public_all_clients" ON clients;
+DROP POLICY IF EXISTS "public_all_invoices" ON invoices;
+DROP POLICY IF EXISTS "auth_all_clients" ON clients;
+DROP POLICY IF EXISTS "auth_all_invoices" ON invoices;
+
+-- CLIENTS: hanya authenticated users bisa akses
+CREATE POLICY "users_can_manage_clients" ON clients
+  FOR ALL
+  USING (auth.role() = 'authenticated')
+  WITH CHECK (auth.role() = 'authenticated');
+
+-- INVOICES: authenticated bisa manage, anon bisa SELECT (buat print)
+CREATE POLICY "users_can_manage_invoices" ON invoices
+  FOR ALL
+  USING (auth.role() = 'authenticated')
+  WITH CHECK (auth.role() = 'authenticated');
+
+CREATE POLICY "public_can_view_invoices" ON invoices
+  FOR SELECT
+  USING (true);
+
+-- Add user_id column to existing tables (if not exists)
+DO $$
+BEGIN
+  IF NOT EXISTS (SELECT 1 FROM information_schema.columns WHERE table_name='clients' AND column_name='user_id') THEN
+    ALTER TABLE clients ADD COLUMN user_id UUID REFERENCES auth.users(id) ON DELETE CASCADE;
+  END IF;
+  IF NOT EXISTS (SELECT 1 FROM information_schema.columns WHERE table_name='invoices' AND column_name='user_id') THEN
+    ALTER TABLE invoices ADD COLUMN user_id UUID REFERENCES auth.users(id) ON DELETE CASCADE;
+  END IF;
+END $$;

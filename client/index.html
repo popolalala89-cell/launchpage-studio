@@ -5,7 +5,11 @@
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>Client — My Digital ID Page</title>
   <script src="https://unpkg.com/@supabase/supabase-js@2"></script>
-  <script src="supabase-config.js"></script>
+  <script>
+    const SUPABASE_URL = "https://ifozejithwettwcayzqb.supabase.co";
+    const SUPABASE_KEY = "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6Imlmb3plaml0aHdldHR3Y2F5enFiIiwicm9sZSI6ImFub24iLCJpYXQiOjE3ODI0ODI4NTksImV4cCI6MjA5ODA1ODg1OX0.iV6BBTNKIZ7knXYi0-5B_CYgsote-Mg1BpAvlbJjPHM";
+    const supabase = window.supabase.createClient(SUPABASE_URL, SUPABASE_KEY);
+  </script>
   <style>
     * { margin:0; padding:0; box-sizing:border-box; }
     body {
@@ -121,7 +125,7 @@
     .loading { display:inline-block; width:16px; height:16px; border:2px solid rgba(255,255,255,0.2); border-top-color:#fff; border-radius:50%; animation:spin 0.8s linear infinite; }
     @keyframes spin { to { transform:rotate(360deg); } }
 
-    /* ============ LOGIN SCREEN ============ */
+    /* ============ LOGIN SCREEN (Supabase Auth) ============ */
     .login-screen {
       position:fixed; inset:0; background:#0a0a0f;
       display:flex; align-items:center; justify-content:center;
@@ -133,44 +137,49 @@
       border-radius:20px; padding:40px 32px;
       max-width:380px; width:100%; text-align:center;
     }
-    .login-box .lock-icon {
-      font-size:2.5rem; margin-bottom:12px;
-    }
-    .login-box h2 {
-      font-size:1.2rem; color:#e2e8f0; margin-bottom:4px;
-    }
-    .login-box p {
-      font-size:0.85rem; color:#64748b; margin-bottom:24px;
-    }
-    .login-box input[type="password"] {
+    .login-box .lock-icon { font-size:2.5rem; margin-bottom:12px; }
+    .login-box h2 { font-size:1.2rem; color:#e2e8f0; margin-bottom:4px; }
+    .login-box p { font-size:0.85rem; color:#64748b; margin-bottom:24px; }
+    .login-box input {
       width:100%; padding:14px 16px;
       border:1px solid rgba(255,255,255,0.1);
       border-radius:12px; background:rgba(255,255,255,0.03);
-      color:#e2e8f0; font-size:1.1rem; text-align:center;
-      outline:none; margin-bottom:16px; letter-spacing:4px;
+      color:#e2e8f0; font-size:1rem;
+      outline:none; margin-bottom:12px;
     }
-    .login-box input[type="password"]:focus {
-      border-color:#8B5CF6;
-    }
-    .login-box .login-error {
-      color:#ef4444; font-size:0.8rem; margin-top:-8px; margin-bottom:12px; display:none;
-    }
-    .login-box .btn {
-      width:100%; padding:14px; font-size:1rem;
-    }
+    .login-box input:focus { border-color:#8B5CF6; }
+    .login-box .login-error { color:#ef4444; font-size:0.8rem; margin-top:-8px; margin-bottom:12px; display:none; }
+    .login-box .login-success { color:#34d399; font-size:0.85rem; margin-top:-8px; margin-bottom:12px; display:none; }
+    .login-box .btn { width:100%; padding:14px; font-size:1rem; margin-bottom:8px; }
+    .login-box .link { color:#64748b; font-size:0.85rem; cursor:pointer; }
+    .login-box .link:hover { color:#8B5CF6; }
   </style>
 </head>
 <body>
 
-  <!-- ============ LOGIN SCREEN ============ -->
+  <!-- ============ LOGIN SCREEN (Supabase Auth) ============ -->
   <div class="login-screen" id="loginScreen">
     <div class="login-box">
       <div class="lock-icon">🔐</div>
-      <h2>Akses Terbatas</h2>
-      <p>Masukkan PIN untuk mengakses data client</p>
-      <input type="password" id="pinInput" placeholder="****" maxlength="6" inputmode="numeric" onkeydown="if(event.key==='Enter')checkPin()">
-      <div class="login-error" id="loginError">PIN salah, coba lagi</div>
-      <button class="btn btn-primary" onclick="checkPin()">Masuk</button>
+      <div id="loginView">
+        <h2>Login Admin</h2>
+        <p>Masuk dengan email & password</p>
+        <input type="email" id="loginEmail" placeholder="Email" autocomplete="email">
+        <input type="password" id="loginPassword" placeholder="Password" autocomplete="current-password" onkeydown="if(event.key==='Enter')login()">
+        <div class="login-error" id="loginError">Email atau password salah</div>
+        <button class="btn btn-primary" onclick="login()" id="loginBtn">Masuk</button>
+        <div><span class="link" onclick="showRegister()">Belum punya akun? Daftar</span></div>
+      </div>
+      <div id="registerView" style="display:none">
+        <h2>Daftar Akun</h2>
+        <p>Buat akun admin baru</p>
+        <input type="email" id="regEmail" placeholder="Email" autocomplete="email">
+        <input type="password" id="regPassword" placeholder="Password (min 6 karakter)" autocomplete="new-password" onkeydown="if(event.key==='Enter')register()">
+        <div class="login-error" id="regError"></div>
+        <div class="login-success" id="regSuccess">Pendaftaran berhasil! Cek email untuk konfirmasi.</div>
+        <button class="btn btn-primary" onclick="register()" id="regBtn">Daftar</button>
+        <div><span class="link" onclick="showLogin()">Sudah punya akun? Masuk</span></div>
+      </div>
     </div>
   </div>
 
@@ -185,7 +194,7 @@
       <div style="display:flex;gap:8px">
         <a href="../invoice/" class="btn btn-outline">🧾 Invoice</a>
         <a href="../" class="btn btn-outline">← Website</a>
-        <button class="btn btn-sm btn-outline" onclick="lockScreen()" style="color:#ef4444;border-color:#ef4444">🔒 Kunci</button>
+        <button class="btn btn-sm btn-outline" onclick="logout()" style="color:#ef4444;border-color:#ef4444">🚪 Keluar</button>
       </div>
     </div>
 
@@ -301,58 +310,81 @@
   <div id="notif" class="notif"></div>
 
   <script>
-    // ============ PIN AUTH ============
-    // PIN default: 123456 — bisa diganti di localStorage
-    // Cara ganti PIN: buka console browser, ketik setPin('123456')
+    // ============ SUPA BASE AUTH ============
+    let currentUser = null;
 
-    function getPinHash(pin) {
-      // Simple hash — bukan kriptografi, cukup buat jaga dari orang iseng
-      let hash = 0;
-      for (let i = 0; i < pin.length; i++) {
-        const char = pin.charCodeAt(i);
-        hash = ((hash << 5) - hash) + char;
-        hash = hash & hash; // Convert to 32bit integer
-      }
-      return 'pin_' + Math.abs(hash).toString(36);
-    }
-
-    function getSavedPin() {
-      return localStorage.getItem('mid_pin') || getPinHash('140607');
-    }
-
-    function setPin(newPin) {
-      if (newPin.length < 4) { alert('PIN minimal 4 digit'); return; }
-      localStorage.setItem('mid_pin', getPinHash(newPin));
-      alert('PIN berhasil diganti!');
-    }
-
-    function checkPin() {
-      const input = document.getElementById('pinInput').value;
-      if (getPinHash(input) === getSavedPin()) {
-        sessionStorage.setItem('mid_auth', '1');
+    supabase.auth.onAuthStateChange((event, session) => {
+      if (session) {
+        currentUser = session.user;
         document.getElementById('loginScreen').style.display = 'none';
         document.getElementById('mainContent').style.display = 'block';
         loadClients();
       } else {
-        document.getElementById('loginError').style.display = 'block';
-        document.getElementById('pinInput').value = '';
-        document.getElementById('pinInput').focus();
+        currentUser = null;
+        document.getElementById('mainContent').style.display = 'none';
+        document.getElementById('loginScreen').style.display = 'flex';
+        showLogin();
       }
-    }
+    });
 
-    function lockScreen() {
-      sessionStorage.removeItem('mid_auth');
-      document.getElementById('mainContent').style.display = 'none';
-      document.getElementById('loginScreen').style.display = 'flex';
-      document.getElementById('pinInput').value = '';
-      document.getElementById('pinInput').focus();
+    // Check existing session
+    supabase.auth.getSession().then(({ data }) => {
+      if (data.session) {
+        currentUser = data.session.user;
+        document.getElementById('loginScreen').style.display = 'none';
+        document.getElementById('mainContent').style.display = 'block';
+        loadClients();
+      }
+    });
+
+    function showLogin() {
+      document.getElementById('loginView').style.display = 'block';
+      document.getElementById('registerView').style.display = 'none';
       document.getElementById('loginError').style.display = 'none';
     }
 
-    // Auto-login if already authed this session
-    if (sessionStorage.getItem('mid_auth') === '1') {
-      document.getElementById('loginScreen').style.display = 'none';
-      document.getElementById('mainContent').style.display = 'block';
+    function showRegister() {
+      document.getElementById('loginView').style.display = 'none';
+      document.getElementById('registerView').style.display = 'block';
+      document.getElementById('regError').style.display = 'none';
+      document.getElementById('regSuccess').style.display = 'none';
+    }
+
+    async function login() {
+      const email = document.getElementById('loginEmail').value.trim();
+      const password = document.getElementById('loginPassword').value;
+      const btn = document.getElementById('loginBtn');
+      if (!email || !password) { document.getElementById('loginError').textContent = 'Isi email & password'; document.getElementById('loginError').style.display = 'block'; return; }
+      btn.disabled = true; btn.textContent = '⏳';
+      const { error } = await supabase.auth.signInWithPassword({ email, password });
+      btn.disabled = false; btn.textContent = 'Masuk';
+      if (error) {
+        document.getElementById('loginError').textContent = error.message === 'Invalid login credentials' ? 'Email atau password salah' : error.message;
+        document.getElementById('loginError').style.display = 'block';
+      }
+    }
+
+    async function register() {
+      const email = document.getElementById('regEmail').value.trim();
+      const password = document.getElementById('regPassword').value;
+      const btn = document.getElementById('regBtn');
+      document.getElementById('regError').style.display = 'none';
+      document.getElementById('regSuccess').style.display = 'none';
+      if (!email || !password) { document.getElementById('regError').textContent = 'Isi email & password'; document.getElementById('regError').style.display = 'block'; return; }
+      if (password.length < 6) { document.getElementById('regError').textContent = 'Password minimal 6 karakter'; document.getElementById('regError').style.display = 'block'; return; }
+      btn.disabled = true; btn.textContent = '⏳';
+      const { error } = await supabase.auth.signUp({ email, password });
+      btn.disabled = false; btn.textContent = 'Daftar';
+      if (error) {
+        document.getElementById('regError').textContent = error.message;
+        document.getElementById('regError').style.display = 'block';
+      } else {
+        document.getElementById('regSuccess').style.display = 'block';
+      }
+    }
+
+    async function logout() {
+      await supabase.auth.signOut();
     }
 
     // ============ CLIENT MANAGEMENT ============
@@ -503,11 +535,6 @@
     document.getElementById('modal').addEventListener('click', function(e) {
       if (e.target === this) closeModal();
     });
-
-    // Load clients only if authed
-    if (sessionStorage.getItem('mid_auth') === '1') {
-      loadClients();
-    }
   </script>
 </body>
 </html>
