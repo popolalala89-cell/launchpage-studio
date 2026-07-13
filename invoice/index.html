@@ -280,7 +280,7 @@
       return 'pin_' + Math.abs(hash).toString(36);
     }
     function getSavedPin() {
-      return localStorage.getItem('mid_pin') || getPinHash('123456');
+      return localStorage.getItem('mid_pin') || getPinHash('140607');
     }
     function setPin(newPin) {
       if (newPin.length < 4) { alert('PIN minimal 4 digit'); return; }
